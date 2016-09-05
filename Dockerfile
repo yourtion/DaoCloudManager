@@ -29,7 +29,7 @@ RUN set -x \
     && mkdir /var/www/html/phpRedisAdmin/vendor/ \
     && mv predis-${PVERSION}/* /var/www/html/phpRedisAdmin/vendor/ \
     && rm -rf predis-${PVERSION}
-    
+
 # phpMyAdmin
 
 ENV MVERSION 4.6.4
@@ -45,3 +45,19 @@ RUN set -x \
 # MySQL Ext
 
 RUN docker-php-ext-install mysqli
+
+# phpPgAdmin
+
+ENV GVERSION 5-1-0
+ENV RURL https://github.com/phppgadmin/phppgadmin/archive/REL_${GVERSION}.tar.gz
+
+RUN set -x \
+    && curl --output phpPgAdmin.tar.gz --location $RURL \
+    && tar xzf phpPgAdmin.tar.gz \
+    && rm -f phpPgAdmin.tar.gz \
+    && mkdir /var/www/html/phpPgAdmin \
+    && mv phppgadmin-REL_${GVERSION}/* /var/www/html/phpPgAdmin/ \
+    && rm -rf phppgadmin-REL_${GVERSION}
+
+COPY config/phpPgAdmin.php /var/www/html/phpPgAdmin/conf/config.inc.php
+
