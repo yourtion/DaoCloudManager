@@ -29,4 +29,19 @@ RUN set -x \
     && mkdir /var/www/html/phpRedisAdmin/vendor/ \
     && mv predis-${PVERSION}/* /var/www/html/phpRedisAdmin/vendor/ \
     && rm -rf predis-${PVERSION}
+    
+# phpMyAdmin
 
+ENV MVERSION 4.6.4
+ENV MURL https://files.phpmyadmin.net/phpMyAdmin/${MVERSION}/phpMyAdmin-${MVERSION}-all-languages.tar.gz
+
+RUN set -x \
+    && curl --output phpMyAdmin.tar.gz --location $MURL \
+    && tar xzf phpMyAdmin.tar.gz \
+    && rm -f phpMyAdmin.tar.gz \
+    && mv phpMyAdmin* /var/www/html/phpMyAdmin \
+    && rm -rf /var/www/html/phpMyAdmin/js/jquery/src/ /var/www/html/phpMyAdmin/js/openlayers/src/ /var/www/html/phpMyAdmin/setup/ /var/www/html/phpMyAdmin/sql/ /var/www/html/phpMyAdmin/examples/ /var/www/html/phpMyAdmin/test/ /var/www/html/phpMyAdmin/po/
+
+# MySQL Ext
+
+RUN docker-php-ext-install mysqli
